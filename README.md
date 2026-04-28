@@ -6,25 +6,6 @@
 
 Análise exploratória de dados do e-commerce brasileiro utilizando o dataset público da Olist, com foco em eficiência logística, satisfação do cliente e impacto regional no desempenho de vendas.
 
----
-
-## Sumário
-
-- [Introdução](#introdução)
-- [Contexto](#contexto)
-- [Problema](#problema)
-- [Objetivos](#objetivos)
-- [Preparação dos Dados](#preparação-dos-dados)
-- [Análises Realizadas](#análises-realizadas)
-- [Principais Insights](#principais-insights)
-- [Recomendações Estratégicas](#recomendações-estratégicas)
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Estrutura do Projeto](#estrutura-do-projeto)
-- [Como Executar](#como-executar)
-- [Resultados](#resultados)
-- [Conclusão](#conclusão)
-- [Autor](#autor)
-- [Licença](#licença)
 
 ---
 
@@ -99,15 +80,6 @@ O crescimento de vendas é concentrado na região Sudeste do Brasil, e regiões 
 
 Analisar o desempenho logístico do e-commerce brasileiro através do estudo de caso da plataforma Olist, investigando a relação entre distribuição geográfica, eficiência operacional e satisfação do cliente.
 
-### Objetivos Específicos
-
-1. **Mapear a distribuição regional** de vendas, sellers e clientes
-2. **Analisar a eficiência logística** por região (SLA, taxa de atraso, custo de frete)
-3. **Identificar correlações** entre performance logística e satisfação do cliente
-4. **Realizar análise de sentimento** em avaliações de clientes (NLP)
-5. **Avaliar impacto do atraso** na taxa de retenção e recompra
-6. **Propor recomendações estratégicas** para otimização operacional
-
 ---
 
 ## Preparação dos Dados
@@ -132,42 +104,6 @@ Analisar o desempenho logístico do e-commerce brasileiro através do estudo de 
 | `olist_sellers_dataset` | Dados dos vendedores | ~3k |
 | `olist_products_dataset` | Catálogo de produtos | ~32k |
 | `olist_geolocation_dataset` | Dados geográficos | ~1M |
-
-### Schema das Tabelas Principais
-
-#### Orders (Pedidos)
-```
-order_id                    : Identificador único do pedido
-customer_id                 : Identificador do cliente
-order_status                : Status do pedido
-order_purchase_timestamp    : Data/hora da compra
-order_approved_at           : Data/hora da aprovação
-order_delivered_carrier_date: Data/hora de postagem
-order_delivered_customer_date: Data/hora de entrega
-order_estimated_delivery_date: Data estimada de entrega
-```
-
-#### Order Items (Itens do Pedido)
-```
-order_id          : Identificador do pedido
-order_item_id     : Número sequencial do item
-product_id        : Identificador do produto
-seller_id         : Identificador do vendedor
-shipping_limit_date: Data limite para envio
-price             : Preço do item
-freight_value     : Valor do frete
-```
-
-#### Reviews (Avaliações)
-```
-review_id            : Identificador único da avaliação
-order_id             : Identificador do pedido
-review_score         : Nota de 1 a 5 estrelas
-review_comment_title : Título do comentário
-review_comment_message: Texto do comentário
-review_creation_date : Data de criação da avaliação
-review_answer_timestamp: Data de resposta
-```
 
 ### Tratamento de Dados
 
@@ -431,130 +367,19 @@ print(f"Taxa recompra (primeira atrasada): {taxa_recompra_atrasados:.2f}%")
 
 ## Recomendações Estratégicas
 
-### 1. **Programa de Incentivo a Sellers Locais**
+### 1. SLA
 
-**Objetivo**: Reduzir SLA e custo de frete via sellers regionais
+- Revisar os prazos prometidos para as regiões Norte e Nordeste aumentando a margem de segurança em 20% para transformar pedidos atrasados em entregas no prazo, atendo a expectativa do cliente e elevando a nota média sem alterar a operação física.
+- Automatizar o disparo de cupons de desconto exclusivos para clientes que sofreram atraso para quebrar a tendência de 100% de churn, incentivando uma segunda chance à plataforma e gerar recomendações pelo pós-compra.
+- Permitir subsídios de frete (Frete Grátis ou Reduzido) como ferramenta de conversão para compensar prazos de entrega mais longos em regiões de difícil acesso.
 
-**Implementação**:
-- Onboarding facilitado com taxas reduzidas (6 meses) para sellers Norte/Nordeste
-- Badge "Entrega Local" destacando sellers da mesma região
-- Ranqueamento com peso de 15-20% para sellers locais
+### 2. Sellers
 
-**Impacto Esperado**:
-- Redução de 30-40% no SLA médio Norte/Nordeste
-- Diminuição de 25% nos custos de frete
-- Aumento de 0,5 estrelas na avaliação média
-- Crescimento de 40-60% no GMV dessas regiões (18 meses)
-
-### 2. **Sistema de Frete Inteligente e Dinâmico**
-
-**Objetivo**: Otimizar custos e percepção de valor do frete
-
-**Implementação**:
-- ML model para precificação dinâmica (distância, peso, histórico, sazonalidade)
-- Programa "Frete Progressivo": subsídio parcial em fretes >R$ 30 (Norte/Nordeste)
-- Opção "Frete Econômico": +5-7 dias com 40-50% desconto
-
-**Impacto Esperado**:
-- Redução de 15-20% no custo médio de frete
-- Aumento de 8-12% na taxa de conversão
-- Redução de 30% em menções negativas sobre frete
-- ROI de 180% em 12 meses
-
-### 3. **SLA Segmentado por Região**
-
-**Objetivo**: Alinhar expectativas com realidade logística
-
-**Implementação**:
-- Substituir prazo único por prazos regionalizados + margem de 15%
-- Comunicação proativa: notificações em tempo real (separação, postagem, trânsito)
-- Sistema "Entrega Garantida": sellers podem optar por prazos agressivos com penalidade
-
-**Impacto Esperado**:
-- Redução de 50% na taxa de atrasos
-- Aumento de 0,8 estrelas (Norte/Nordeste)
-- Redução de 40% em tickets de suporte
-- Melhoria de 25% na taxa de recompra
-
-### 4. **Programa de Excelência em Sellers**
-
-**Objetivo**: Reconhecer e incentivar sellers com melhor performance
-
-**Implementação**:
-- Sistema de tiers: Bronze, Prata, Ouro, Platinum
-- Critérios: taxa de atraso <5%, avaliação >4.5, processamento <24h, cancelamento <1%
-- Benefícios Platinum: destaque visual, redução de 30% nas taxas, prioridade
-- "Fulfillment by Olist": armazenagem e logística para sellers premium
-
-**Impacto Esperado**:
-- Aumento de 35% em sellers Ouro/Platinum (12 meses)
-- Redução de 20% no churn de sellers de alta performance
-- Melhoria de 0,3 estrelas na média geral
-- Aumento de 18% na conversão
-
-### 5. **Programa Anti-Churn Logístico**
-
-**Objetivo**: Recuperar clientes que sofreram atraso
-
-**Implementação**:
-- Automação de cupom 15-20% OFF para clientes com atraso
-- Email marketing segmentado explicando melhorias
-- Follow-up proativo 30 dias após o atraso
-
-**Impacto Esperado**:
-- Redução de churn de 100% → 40% (primeira compra atrasada)
-- Custo de retenção < custo de aquisição (ROI positivo)
-
----
-
-## Tecnologias Utilizadas
-
-### Linguagem
-- **Python 3.10+**
-
-### Bibliotecas de Análise de Dados
-```python
-pandas==2.0.3          # Manipulação de dados
-numpy==1.24.3          # Operações numéricas
-scipy==1.11.1          # Estatística avançada
-```
-
-### Visualização
-```python
-matplotlib==3.7.2      # Gráficos base
-seaborn==0.12.2        # Visualizações estatísticas
-plotly==5.15.0         # Gráficos interativos (opcional)
-```
-
-### Análise Geoespacial
-```python
-geopandas==0.13.2      # Análise geográfica
-shapely==2.0.1         # Geometrias
-folium==0.14.0         # Mapas interativos (opcional)
-```
-
-### Processamento de Linguagem Natural
-```python
-nltk==3.8.1            # Processamento de texto
-unidecode==1.3.6       # Normalização de caracteres
-wordcloud==1.9.2       # Nuvem de palavras (opcional)
-```
-
-### Machine Learning
-```python
-scikit-learn==1.3.0    # Preprocessamento e análise
-```
-
-### Jupyter
-```python
-jupyter==1.0.0         # Ambiente de notebook
-ipykernel==6.25.0      # Kernel Python
-```
-
-### Ambiente
-```python
-python-dotenv==1.0.0   # Variáveis de ambiente
-```
+- Criar incentivos ou campanhas para a entrada de novos sellers em outras regiões, principalmente Norte e Nordeste, reduzindo a distância entre o estoque e o consumidor final.
+- Implementar um sistema de pontuação para sellers baseado em performance logística e review score. Exemplo: A, B, C, D e E.
+   - A/B: Prioridade em algoritmos de busca e parcerias de frete.
+   - C/D/E: Acesso obrigatório a trilhas de treinamento focada em logística e proteção do produto.
+- Implementar um indicador de confiança para sellers baseada no sistema de pontuação, reduzindo a ansiedade e insegurança do comprador.
 
 ---
 
@@ -624,37 +449,6 @@ jupyter notebook
 # Exemplo: rodar análise completa
 python src/main.py
 ```
-
----
-
-## Conclusão
-
-### Validação da Hipótese
-
-**CONFIRMADA**: A análise confirma que o crescimento do e-commerce brasileiro através da Olist apresenta forte concentração regional (Sudeste: 50%+ receita), resultado direto de vantagens logísticas (prazos 54% mais rápidos, fretes 43% mais baratos).
-
-### Principais Achados
-
-1. **Logística é Destino**
-   - Atrasos causam queda de 35% na satisfação
-   - 100% de churn quando primeira compra atrasa
-   - 67% das reclamações são sobre logística
-
-2. **Desigualdade Regional**
-   - Norte: 22 dias (SLA) vs Sudeste: 8 dias
-   - Norte: R$ 41 (frete) vs Sudeste: R$ 20
-   - Nordeste: maior taxa de atraso (12,8%)
-
-3. **Oportunidade Massiva**
-   - Norte + Nordeste + Centro-Oeste = 64% território + 46% população
-   - Mas apenas 25% da receita
-   - Gap de 40-60% de crescimento potencial
-
-### Mensagem Final
-
-> **"A democratização do e-commerce no Brasil passa necessariamente pela resolução dos desafios logísticos. Norte, Nordeste e Centro-Oeste representam 64% do território nacional e 46% da população, mas apenas 25% da receita. Este gap não é apenas um problema — é a maior oportunidade de crescimento para a Olist nos próximos anos."**
-
-**O momento de agir é agora. Os dados não mentem: logística é destino.** 
 
 ---
 
